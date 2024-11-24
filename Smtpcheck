@@ -1,0 +1,36 @@
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+# ای میل کی تفصیلات
+sender_email = "your_email@example.com"
+receiver_email = "receiver_email@example.com"
+password = "your_email_password"
+
+# ای میل کا مواد
+subject = "Test Email"
+body = "This is a test email sent using Python!"
+
+# MIME کا استعمال کر کے ای میل کا پیغام تشکیل دیں
+msg = MIMEMultipart()
+msg['From'] = sender_email
+msg['To'] = receiver_email
+msg['Subject'] = subject
+msg.attach(MIMEText(body, 'plain'))
+
+try:
+    # SMTP سرور سے کنیکٹ کریں
+    server = smtplib.SMTP('smtp.example.com', 587)  # SMTP سرور کا ایڈریس اور پورٹ نمبر
+    server.starttls()  # TLS انکرپشن کو شروع کریں
+    server.login(sender_email, password)  # لاگ ان کریں
+
+    # ای میل بھیجیں
+    text = msg.as_string()
+    server.sendmail(sender_email, receiver_email, text)
+    print("Email sent successfully!")
+
+except Exception as e:
+    print(f"Failed to send email: {e}")
+
+finally:
+    server
